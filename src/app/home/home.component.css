@@ -1,0 +1,207 @@
+/* === Container === */
+.container-fluid {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* === Card Styling === */
+.card {
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* === Stats Cards === */
+.stats {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stats:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stats-body {
+  padding: 2rem 1rem;
+}
+
+.stats h6 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.stats h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* === Gradient Backgrounds === */
+.bg-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+.bg-success {
+  background: linear-gradient(135deg, #11998e, #38ef7d) !important;
+}
+
+.bg-warning {
+  background: linear-gradient(135deg, #f7971e, #ffd200) !important;
+}
+
+/* === Search Box === */
+.search-box {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.search-box input {
+  padding-left: 2.5rem;
+  border-radius: 8px;
+}
+
+/* === Badges === */
+.badge {
+  padding: 8px 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.badge-approved {
+  background: linear-gradient(135deg, #28a745, #6ddf9e);
+  color: white;
+}
+
+.badge-pending {
+  background: linear-gradient(135deg, #ffc107, #ffda6a);
+  color: #212529;
+}
+
+.badge-active {
+  background: linear-gradient(135deg, #17a2b8, #63d9e4);
+  color: white;
+}
+
+.badge-inactive {
+  background: linear-gradient(135deg, #6c757d, #adb5bd);
+  color: white;
+}
+
+/* === Employer / Seeker Cards Border Colors === */
+.border-primary {
+  border-color: #667eea !important;
+}
+
+.border-success {
+  border-color: #38ef7d !important;
+}
+
+.border-warning {
+  border-color: #ffd200 !important;
+}
+
+.border-danger {
+  border-color: #ff6b6b !important;
+}
+
+/* === Form Switch === */
+.form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  background-color: #dee2e6;
+}
+
+.form-check-input:checked {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+/* === Scrollbar === */
+.job-listing-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.job-listing-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.job-listing-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.job-listing-container::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* === Profile Sidebar === */
+.profile-details p {
+  font-size: 0.9rem;
+}
+
+/* === Buttons === */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+.btn-outline-primary {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.btn-outline-primary:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* === Animation === */
+.fadeInUp {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 768px) {
+  .stats-body {
+    padding: 1.5rem 0.5rem;
+  }
+  .stats h3 {
+    font-size: 2rem;
+  }
+}

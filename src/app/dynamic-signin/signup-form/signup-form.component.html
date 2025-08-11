@@ -1,0 +1,132 @@
+<div class="signup-container">
+  <div class="signup-wrapper" *ngIf="role">
+    <div class="signup-card">
+      <!-- Header Section -->
+      <div class="signup-header">
+        <div class="icon-wrapper">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h1 class="signup-title">Join as {{ role | titlecase }}</h1>
+        <p class="signup-subtitle">Create your account and get started today</p>
+      </div>
+
+      <!-- Form Section -->
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-form">
+        <div class="form-grid">
+          <div *ngFor="let key of fieldOrder" class="form-group" 
+               [ngClass]="{
+                 'form-group-full': key === 'bio' || key === 'address' || key === 'skills',
+                 'form-group-password': key.includes('password')
+               }">
+            
+            <!-- Input Field -->
+            <div class="input-wrapper">
+              <label class="form-label">{{ getFieldLabel(key) }}</label>
+              
+              <!-- Regular Input -->
+              <input 
+                *ngIf="!isSelectField(key) && !isTextArea(key)"
+                [type]="getInputType(key)"
+                class="form-input"
+                [class.error]="signupForm.get(key)?.hasError('required') && signupForm.get(key)?.touched"
+                [placeholder]="getPlaceholder(key)"
+                [formControlName]="key"
+              />
+              
+              <!-- Select Dropdown -->
+              <select
+                  *ngIf="isSelectField(key)"
+                  class="form-select"
+                  [class.error]="signupForm.get(key)?.hasError('required') && signupForm.get(key)?.touched"
+                  [formControlName]="key"
+                  (change)="onSelectChange($event, key)"
+                >
+                  <!-- placeholder -->
+                  <option [ngValue]="''" disabled>
+                    Select {{ getFieldLabel(key) }}
+                  </option>
+
+                  <!-- actual options -->
+                  <option
+                    *ngFor="let option of getSelectOptions(key); trackBy: trackByOption"
+                    [ngValue]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+
+              
+              <!-- Textarea -->
+              <textarea 
+                *ngIf="isTextArea(key)"
+                class="form-textarea"
+                [class.error]="signupForm.get(key)?.hasError('required') && signupForm.get(key)?.touched"
+                [placeholder]="getPlaceholder(key)"
+                [formControlName]="key"
+                rows="4">
+              </textarea>
+              
+              <!-- Field Icons -->
+              <i class="field-icon {{ getFieldIcon(key) }}"></i>
+            </div>
+            
+            <!-- Error Messages -->
+            <div class="error-message" *ngIf="signupForm.get(key)?.hasError('required') && signupForm.get(key)?.touched">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ getFieldLabel(key) }} is required
+            </div>
+            
+            <div class="error-message" *ngIf="signupForm.get(key)?.hasError('email') && signupForm.get(key)?.touched">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid email address
+            </div>
+          </div>
+        </div>
+        
+        <!-- Password Match Error -->
+        <div class="error-message global-error" 
+             *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('confirmPassword')?.touched">
+          <i class="fas fa-exclamation-circle"></i>
+          Passwords do not match
+        </div>
+        
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [class.loading]="isLoading"
+          [disabled]="signupForm.invalid || isLoading">
+          <span *ngIf="!isLoading" class="btn-content">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </span>
+          <span *ngIf="isLoading" class="btn-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            Creating Account...
+          </span>
+        </button>
+      </form>
+      
+      <!-- Footer Section -->
+      <div class="signup-footer">
+        <div class="divider">
+          <span>or</span>
+        </div>
+        
+        <p class="login-prompt">
+          Already have an account? 
+          <a routerLink="/login" class="login-link">
+            Sign In <i class="fas fa-arrow-right"></i>
+          </a>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Background Elements -->
+    <div class="bg-elements">
+      <div class="bg-circle bg-circle-1"></div>
+      <div class="bg-circle bg-circle-2"></div>
+      <div class="bg-circle bg-circle-3"></div>
+    </div>
+  </div>
+</div>

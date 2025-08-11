@@ -1,0 +1,430 @@
+Employer Profile Styles
+
+.container-fluid {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Dashboard Stats Cards */
+.stats {
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.stats:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stats-body {
+  padding: 2rem 1rem;
+}
+
+.stats h6 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.stats h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Background Gradients */
+.bg-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.bg-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+}
+
+.bg-danger {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%) !important;
+}
+
+/* Action Buttons */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border: none;
+  transition: all 0.3s ease;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #5a6268 0%, #545b62 100%);
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  border-radius: 6px;
+}
+
+/* Job Cards */
+.job-card {
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.job-card:hover {
+  border-color: #007bff;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.15) !important;
+}
+
+.job-card .card-body {
+  padding: 2rem;
+}
+
+.job-card .card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.job-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.job-card strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Status Badges and Switches */
+.badge {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  box-shadow: 0 2px 10px rgba(17, 153, 142, 0.3);
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%) !important;
+  box-shadow: 0 2px 10px rgba(255, 65, 108, 0.3);
+}
+
+/* Form Switches */
+.form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  border: none;
+  background-color: #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.form-check-input:checked {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  box-shadow: 0 2px 10px rgba(17, 153, 142, 0.5);
+}
+
+.form-check-input:focus {
+  border-color: rgba(17, 153, 142, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(17, 153, 142, 0.25);
+}
+
+.form-check-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #495057;
+  margin-left: 0.5rem;
+}
+
+/* Modal Styling */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+  border-bottom: none;
+  padding: 2rem 2rem 1.5rem 2rem;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-body label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.modal-body .form-control,
+.modal-body textarea {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.modal-body .form-control:focus,
+.modal-body textarea:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem 2rem 2rem;
+  border-top: none;
+}
+
+.btn-close {
+  background-size: 20px;
+  opacity: 0.8;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+.btn:hover{
+  color: white;
+
+}
+
+/* Profile Section */
+.profile-details p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.profile-details strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.profile-details a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.profile-details a:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+/* Empty States */
+.text-center .text-muted h4 {
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Applications Count Highlight */
+.job-card p:last-of-type .btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  font-weight: 500;
+}
+
+.job-card p:last-of-type .btn:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0 10px;
+  }
+  
+  .stats-body {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stats h3 {
+    font-size: 2rem;
+  }
+  
+  .job-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  .btn-lg {
+    font-size: 1rem;
+    padding: 14px 28px;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats h3 {
+    font-size: 1.8rem;
+  }
+  
+  .stats h6 {
+    font-size: 0.75rem;
+  }
+  
+  .job-card .card-title {
+    font-size: 1.2rem;
+  }
+  
+  .job-card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading States */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  border-top-color: #667eea;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+.job-listing-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.job-listing-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.job-listing-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.job-listing-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.job-listing-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Welcome Message Enhancement */
+.card-body h2 {
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+
+/* Enhanced Card Headers */
+.card-title {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Enhancements */
+input[readonly] {
+  background-color: #f8f9fa;
+  opacity: 0.8;
+}
+
+/* Date and Time Styling */
+.job-card p small,
+.profile-details p:contains('Date') {
+  color: #6c757d;
+  font-size: 0.85rem;
+}

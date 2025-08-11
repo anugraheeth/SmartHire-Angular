@@ -1,0 +1,33 @@
+<div class="role-selection-container">
+  <div class="header">
+    <h2 class="title">Choose Your Role</h2>
+    <p class="subtitle">Select how you'd like to use our platform</p>
+  </div>
+  
+  <div class="roles-grid">
+    <div 
+      *ngFor="let role of roles" 
+      class="role-card"
+      (click)="selectRole(role)"
+      [attr.data-role]="role.key"
+    >
+      <div class="role-content">
+        <div class="icon-container">
+          <i class="icon" [ngClass]="role.iconClass">{{ role.iconClass }}</i>
+        </div>
+        <h3 class="role-title">{{ role.label }}</h3>
+        <p class="role-description">{{ role.description }}</p>
+      </div>
+      <div class="role-arrow">
+        <i class="arrow-icon">→</i>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p class="help-text">
+      Not sure which role fits you? 
+      <span class="link" (click)="selectRole(roles[2])">Start as a guest</span>
+    </p>
+  </div>
+</div>

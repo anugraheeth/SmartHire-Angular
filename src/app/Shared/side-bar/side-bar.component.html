@@ -1,0 +1,11 @@
+<div class="card shadow-sm border-0 p-3 h-100 sidebar-card">
+  <ul class="list-group sidebar-menu">
+    <li 
+      *ngFor="let item of menuItems" 
+      class="list-group-item list-group-item-action"
+      [ngClass]="{'active-menu': selectedItem === item.value}"
+      (click)="selectMenu(item)">
+      {{ item.label }}
+    </li>
+  </ul>
+</div>

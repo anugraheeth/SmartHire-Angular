@@ -1,0 +1,45 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Login</h2>
+
+    <form (ngSubmit)="login()">
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-input"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-input"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
+
+    <div class="guest-section">
+      <button type="button" class="btn-primary" >Continue as Guest</button>
+    </div>
+    
+    <div class="login-links">
+      <a routerLink="/forgot-password">Forgot Password?</a>
+      <span>
+        Don't have an account?
+        <a routerLink="/role-selection">Sign Up</a>
+      </span>
+    </div>
+
+    
+  </div>
+</div>

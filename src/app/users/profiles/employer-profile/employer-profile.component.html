@@ -1,0 +1,391 @@
+<div class="container-fluid mt-3 pb-5 mb-5">
+  <div class="row g-3">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-12">
+      <app-side-bar [menuItems]="menuItems" (menuChange)="onMenuChange($event)"></app-side-bar>
+    </div>
+
+    <!-- Main Section -->
+    <div class="col-md-6 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h2 class="mb-4 text-primary">Welcome, {{ employer?.fullName }}</h2>
+
+          <!-- Dashboard Section -->
+          <div *ngIf="selectedMenu === 'dashboard'">
+            <!-- Quick Stats -->
+            <div class="stats-section mb-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">Job Statistics Overview</h5>
+                  
+                  <div class="row g-3">
+                    <div class="col-md-4 col-6">
+                      <div class="card text-white bg-primary shadow-sm stats border-0">
+                        <div class="card-body stats-body text-center">
+                          <i class="bi bi-briefcase display-4 mb-2"></i>
+                          <h6>Total Jobs Posted</h6>
+                          <h3>{{ totalJobs }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                      <div class="card text-white bg-success shadow-sm stats border-0">
+                        <div class="card-body stats-body text-center">
+                          <i class="bi bi-check-circle display-4 mb-2"></i>
+                          <h6>Active Jobs</h6>
+                          <h3>{{ totalActiveJobs }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                      <div class="card text-white bg-warning shadow-sm stats border-0">
+                        <div class="card-body stats-body text-center">
+                          <i class="bi bi-pause-circle display-4 mb-2"></i>
+                          <h6>Inactive Jobs</h6>
+                          <h3>{{ totalInactiveJobs }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Quick Actions</h5>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" (click)="openPostForm()">
+                          <i class="bi bi-plus-circle me-2"></i>Post New Job
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-grid">
+                        <button class="btn btn-outline-primary btn-lg" (click)="goToApplications()">
+                          <i class="bi bi-people me-2"></i>View Applications
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity Summary -->
+            <div class="recent-activity">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Recent Activity</h5>
+                  <div class="text-center mt-4">
+                    <i class="bi bi-activity display-3 text-muted"></i>
+                    <p class="text-muted mt-2">Recent job posting and application activities will appear here</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job Management Section -->
+          <div *ngIf="selectedMenu === 'jobs'">
+            <!-- Job Management Header -->
+            <div class="job-management-section mb-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title mb-0">Manage Your Job Postings</h5>
+                      <p class="text-muted mb-0">{{ Jobs.length }} total jobs posted</p>
+                    </div>
+                    <button class="btn btn-primary" (click)="openPostForm()">
+                      <i class="bi bi-plus-circle me-2"></i>Post New Job
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jobs Listing -->
+            <div class="jobs-listing">
+              <div *ngFor="let job of Jobs" class="job-card card mb-3 shadow-sm border-start border-4"
+                   [ngClass]="job.isActive ? 'border-success' : 'border-warning'">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0 text-primary">{{ job.title }}</h5>
+                    <span class="badge" [ngClass]="job.isActive ? 'bg-success' : 'bg-warning'">
+                      {{ job.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                  
+                  <h6 class="text-muted mb-2">{{ job.companyName }}</h6>
+                  
+                  <div class="row mb-2">
+                    <div class="col-md-6">
+                      <p class="mb-1">
+                        <i class="bi bi-geo-alt"></i>
+                        <strong> Location:</strong> {{ job.companyLocation }}
+                      </p>
+                      <p class="mb-1">
+                        <i class="bi bi-currency-rupee"></i>
+                        <strong> CTC:</strong> {{ job.ctc }}
+                      </p>
+                      <p class="mb-1">
+                        <i class="bi bi-tag"></i>
+                        <strong> Category:</strong> {{ job.category }}
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="mb-1">
+                        <i class="bi bi-calendar-plus"></i>
+                        <strong> Posted:</strong> {{ job.postedDate | date:'mediumDate' }}
+                      </p>
+                      <p class="mb-1">
+                        <i class="bi bi-calendar-x"></i>
+                        <strong> Expires:</strong> {{ job.expiryDate | date:'mediumDate' }}
+                      </p>
+                      <p class="mb-1">
+                        <i class="bi bi-people"></i>
+                        <strong> Applications:</strong> {{ job.applicationsCount || 0 }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <strong> Description:</strong>
+                    <p class="text-muted mt-1">
+                      {{ job.description.length > 150 ? (job.description | slice:0:150) + '...' : job.description }}
+                    </p>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check form-switch">
+                      <input type="checkbox" 
+                             class="form-check-input"
+                             [(ngModel)]="job.isActive"
+                             (ngModelChange)="toggleActivation(job)">
+                      <label class="form-check-label">
+                        {{ job.isActive ? 'Deactivate Job' : 'Activate Job' }}
+                      </label>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-outline-primary btn-sm" 
+                              (click)="openExpiryModal(job)"
+                              title="Edit Expiry Date">
+                        <i class="bi bi-pencil"></i> Edit
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm"
+                              (click)="viewApplication(job)"
+                              title="View Applications">
+                        <i class="bi bi-people"></i> Applications ({{ job.applicationsCount || 0 }})
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Jobs Found -->
+              <div *ngIf="Jobs.length === 0" class="text-center text-muted mt-4">
+                <i class="bi bi-briefcase display-1 text-muted"></i>
+                <h4>No jobs posted yet</h4>
+                <p>Start by posting your first job to attract talented candidates</p>
+                <button class="btn btn-primary" (click)="openPostForm()">
+                  <i class="bi bi-plus-circle me-2"></i>Post Your First Job
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Applications Section -->
+          <div *ngIf="selectedMenu === 'applications'">
+            <div class="text-center mt-5">
+              <i class="bi bi-people display-1 text-muted"></i>
+              <h4>Job Applications</h4>
+              <p class="text-muted">Review and manage applications for your job postings</p>
+              <button class="btn btn-primary" (click)="goToApplications()">
+                View All Applications
+              </button>
+            </div>
+          </div>
+
+          <!-- Analytics Section -->
+          <div *ngIf="selectedMenu === 'analytics'">
+            <div class="text-center mt-5">
+              <i class="bi bi-graph-up display-1 text-muted"></i>
+              <h4>Analytics & Reports</h4>
+              <p class="text-muted">Track performance metrics for your job postings</p>
+              <button class="btn btn-outline-primary">
+                View Detailed Analytics
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employer Profile Details -->
+    <div class="col-md-3 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">Employer Profile</h5>
+
+          <div *ngIf="employer" class="profile-details">
+            <p class="mb-2"><strong>Employer ID:</strong> {{ employer.employerID }}</p>
+            <p class="mb-2"><strong>Full Name:</strong> {{ employer.fullName }}</p>
+            <p class="mb-2"><strong>Email:</strong> {{ employer.email }}</p>
+            <p class="mb-2"><strong>Phone:</strong> {{ employer.contactNumber }}</p>
+            <p class="mb-2"><strong>Role:</strong> {{ employer.roleID }}</p>
+            <p class="mb-2"><strong>Designation:</strong> {{ employer.designation }}</p>
+            
+            <hr>
+            
+            <div class="mb-3">
+              <strong>Company Details:</strong>
+              <p class="mb-2 mt-2"><strong>Company:</strong> {{ employer.companyName }}</p>
+              <p class="mb-2"><strong>Industry:</strong> {{ employer.industry }}</p>
+              <div class="mb-2" *ngIf="employer.website">
+                <strong>Website:</strong><br>
+                <a [href]="employer.website.startsWith('http') ? employer.website : 'https://' + employer.website" 
+                   target="_blank" class="text-primary">
+                  <i class="bi bi-globe"></i> {{ employer.website }}
+                </a>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <p class="mb-2"><strong>Member Since:</strong> {{ employer.createdAt | date:'longDate' }}</p>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary btn-sm">
+                <i class="bi bi-pencil"></i> Edit Profile
+              </button>
+              <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-building"></i> Company Settings
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!employer" class="text-center text-muted">
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <!-- New Job Post Modal -->
+  <div class="modal fade" id="postForm" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalLabel">
+            <i class="bi bi-plus-circle me-2"></i>Post New Job
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Employer ID (hidden/readonly) -->
+            <div class="col-12" style="display: none;">
+              <label class="form-label">Employer ID</label>
+              <input type="number" [(ngModel)]="newPost.employerId" class="form-control" readonly>
+            </div>
+
+            <!-- Title -->
+            <div class="col-md-6">
+              <label class="form-label">Job Title <span class="text-danger">*</span></label>
+              <input type="text" [(ngModel)]="newPost.title" class="form-control" 
+                     placeholder="e.g., Senior Software Developer">
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+              <label class="form-label">Category <span class="text-danger">*</span></label>
+              <input type="text" [(ngModel)]="newPost.category" class="form-control"
+                     placeholder="e.g., Information Technology">
+            </div>
+
+            <!-- Company Location -->
+            <div class="col-md-6">
+              <label class="form-label">Company Location <span class="text-danger">*</span></label>
+              <input type="text" [(ngModel)]="newPost.companyLocation" class="form-control"
+                     placeholder="e.g., Bangalore, Karnataka">
+            </div>
+
+            <!-- CTC -->
+            <div class="col-md-6">
+              <label class="form-label">CTC <span class="text-danger">*</span></label>
+              <input type="text" [(ngModel)]="newPost.ctc" class="form-control"
+                     placeholder="e.g., ₹8-12 LPA">
+            </div>
+
+            <!-- Posted Date (readonly) -->
+            <div class="col-md-6">
+              <label class="form-label">Posted Date</label>
+              <input type="datetime-local" [(ngModel)]="newPost.postedDate" class="form-control" readonly>
+            </div>
+
+            <!-- Expiry Date -->
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date <span class="text-danger">*</span></label>
+              <input type="date" [(ngModel)]="newPost.expiryDate" class="form-control">
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <label class="form-label">Job Description <span class="text-danger">*</span></label>
+              <textarea [(ngModel)]="newPost.description" class="form-control" rows="2"
+                        placeholder="Describe the role, responsibilities, requirements, and qualifications..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-2"></i>Cancel
+          </button>
+          <button type="button" class="btn btn-primary" (click)="save()">
+            <i class="bi bi-check-circle me-2"></i>Post Job
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expiry Date Edit Modal -->
+  <div class="modal fade" id="expiryModal" tabindex="-1" aria-labelledby="expiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="expiryModalLabel">
+            <i class="bi bi-calendar-x me-2"></i>Edit Expiry Date
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Job Title</label>
+            <input type="text" [value]="selectedJob?.title" class="form-control" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Expiry Date <span class="text-danger">*</span></label>
+            <input type="date" [(ngModel)]="selectedJob.expiryDate" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-2"></i>Cancel
+          </button>
+          <button type="button" class="btn btn-primary" (click)="saveExpiryDate()">
+            <i class="bi bi-check-circle me-2"></i>Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

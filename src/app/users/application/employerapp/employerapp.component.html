@@ -1,0 +1,270 @@
+<div class="container-fluid mt-3 pb-5 mb-5">
+  <div class="row g-3">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-12">
+      <app-side-bar [menuItems]="menuItems" (menuChange)="onMenuChange($event)"></app-side-bar>
+    </div>
+
+    <!-- Main Section -->
+    <div class="col-md-6 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary mb-0">Application Management</h2>
+            <div *ngIf="selectedJob" class="text-muted">
+              <i class="bi bi-people"></i> {{ applications.length }} Applications
+            </div>
+          </div>
+
+          <!-- Job Selection State -->
+          <ng-container *ngIf="selectedJob; else noSelection">
+            
+            <!-- Application Summary Stats -->
+            <div *ngIf="applications.length > 0" class="mb-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h6 class="card-title">Application Overview</h6>
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <div class="border-end">
+                        <h5 class="text-warning mb-0">{{ getApplicationsByStatus('pending').length }}</h5>
+                        <small class="text-muted">Pending</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="border-end">
+                        <h5 class="text-success mb-0">{{ getApplicationsByStatus('accepted').length }}</h5>
+                        <small class="text-muted">Accepted</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <h5 class="text-danger mb-0">{{ getApplicationsByStatus('rejected').length }}</h5>
+                      <small class="text-muted">Rejected</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Applications List -->
+            <ng-container *ngIf="applications.length > 0; else noApplication">
+              <div class="applications-list">
+                <div *ngFor="let application of applications; let i = index" 
+                     class="application-card card mb-3 shadow-sm border-start border-4"
+                     [ngClass]="getApplicationBorderClass(application.status)">
+                  <div class="card-body">
+                    
+                    <!-- Application Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <div>
+                        <h5 class="card-title mb-1 text-primary">{{ application.jobSeekerName }}</h5>
+                        <p class="text-muted mb-0">
+                          <i class="bi bi-person-badge"></i> ID: {{ application.jobSeekerID }}
+                        </p>
+                      </div>
+                      <span class="badge fs-6" [ngClass]="getStatusBadgeClass(application.status)">
+                        <i [class]="getStatusIcon(application.status)"></i>
+                        {{ application.status | titlecase }}
+                      </span>
+                    </div>
+
+                    <!-- Application Details -->
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <p class="mb-2">
+                          <i class="bi bi-hash text-muted"></i>
+                          <strong>Application ID:</strong> 
+                          <span class="text-muted">#{{ application.applicationID }}</span>
+                        </p>
+                        <p class="mb-2">
+                          <i class="bi bi-briefcase text-muted"></i>
+                          <strong>Job ID:</strong> 
+                          <span class="text-muted">#{{ application.jobID }}</span>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="mb-2">
+                          <i class="bi bi-calendar-check text-muted"></i>
+                          <strong>Applied On:</strong> 
+                          <span class="text-muted">{{ application.appliedOn | date:'mediumDate' }}</span>
+                        </p>
+                        <p class="mb-2">
+                          <i class="bi bi-file-earmark-pdf text-muted"></i>
+                          <strong>Resume:</strong> 
+                          <span class="text-muted">{{ application.resumeID }}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Status Management -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex align-items-center">
+                        <label class="form-label me-2 mb-0">
+                          <strong>Update Status:</strong>
+                        </label>
+                        <select class="form-select form-select-sm"
+                                style="width: auto; min-width: 120px;"
+                                [(ngModel)]="application.status"
+                                [ngStyle]="getStatusStyle(application.status)"
+                                (change)="onStatusChange(application)">
+                          <option value="pending">Pending</option>
+                          <option value="accepted">Accepted</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                      </div>
+                      
+                      <!-- Action Buttons -->
+                      <div class="btn-group btn-group-sm" role="group">                        
+                        <button class="btn btn-outline-primary" 
+                                title="Download Resume"
+                                (click)="downloadResume(application)">
+                          <i class="bi bi-download"></i>
+                           Resume 
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- No Applications State -->
+            <ng-template #noApplication>
+              <div class="text-center mt-5">
+                <i class="bi bi-inbox display-1 text-muted"></i>
+                <h4 class="mt-3">No Applications Yet</h4>
+                <p class="text-muted">
+                  No candidates have applied for <strong>{{ selectedJob.title }}</strong> yet.
+                  <br>Applications will appear here once candidates start applying.
+                </p>
+                <div class="mt-3">
+                  <button class="btn btn-outline-primary me-2" (click)="shareJobPosting()">
+                    <i class="bi bi-share"></i> Share Job Posting
+                  </button>
+                  <button class="btn btn-outline-secondary" (click)="goBackToJobs()">
+                    <i class="bi bi-arrow-left"></i> Back to Jobs
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+
+          </ng-container>
+
+          <!-- No Job Selected State -->
+          <ng-template #noSelection>
+            <div class="text-center mt-5">
+              <i class="bi bi-cursor display-1 text-muted"></i>
+              <h4 class="mt-3">Select a Job to View Applications</h4>
+              <p class="text-muted">
+                Choose a job posting from the sidebar to view and manage its applications.
+              </p>
+              <button class="btn btn-primary" (click)="goBackToJobs()">
+                <i class="bi bi-briefcase me-2"></i>Browse Jobs
+              </button>
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected Job Details Sidebar -->
+    <div class="col-md-3 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-briefcase me-2"></i>Job Details
+          </h5>
+
+          <ng-container *ngIf="selectedJob; else noJobSelected">
+            <div class="job-details">
+              <!-- Job Header -->
+              <div class="mb-3">
+                <h6 class="text-primary">{{ selectedJob.title }}</h6>
+                <p class="text-muted mb-1">{{ selectedJob.companyName }}</p>
+              </div>
+
+              <hr>
+
+              <!-- Job Information -->
+              <div class="job-info">
+                <div class="mb-2">
+                  <small class="text-muted d-block">Job ID</small>
+                  <span class="fw-bold">#{{ selectedJob.jobID }}</span>
+                </div>
+
+                <div class="mb-2">
+                  <small class="text-muted d-block">
+                    <i class="bi bi-geo-alt"></i> Location
+                  </small>
+                  <span>{{ selectedJob.companyLocation }}</span>
+                </div>
+
+                <div class="mb-2">
+                  <small class="text-muted d-block">
+                    <i class="bi bi-calendar-plus"></i> Posted Date
+                  </small>
+                  <span>{{ selectedJob.postedDate | date:'mediumDate' }}</span>
+                </div>
+
+                <div class="mb-2">
+                  <small class="text-muted d-block">
+                    <i class="bi bi-calendar-x"></i> Expiry Date
+                  </small>
+                  <span>{{ selectedJob.expiryDate | date:'mediumDate' }}</span>
+                </div>
+
+                <div class="mb-2">
+                  <small class="text-muted d-block">
+                    <i class="bi bi-currency-rupee"></i> CTC
+                  </small>
+                  <span>{{ selectedJob.ctc }}</span>
+                </div>
+
+                <div class="mb-3">
+                  <small class="text-muted d-block">
+                    <i class="bi bi-tag"></i> Category
+                  </small>
+                  <span class="badge bg-light text-dark">{{ selectedJob.category }}</span>
+                </div>
+
+                <hr>
+
+                <!-- Job Description -->
+                <div class="mb-3">
+                  <small class="text-muted d-block mb-2">
+                    <i class="bi bi-file-text"></i> Description
+                  </small>
+                  <div class="description-text">
+                    <p class="small">{{ selectedJob.description }}</p>
+                  </div>
+                </div>
+
+                <!-- Job Actions -->
+                <div class="d-grid gap-2 mt-3">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="editJob(selectedJob)">
+                    <i class="bi bi-pencil me-2"></i>Edit Job
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="viewJobStatistics(selectedJob)">
+                    <i class="bi bi-graph-up me-2"></i>View Stats
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- No Job Selected State -->
+          <ng-template #noJobSelected>
+            <div class="text-center text-muted mt-4">
+              <i class="bi bi-briefcase display-4 text-muted"></i>
+              <p class="mt-2">No job selected</p>
+              <small>Select a job to view its details</small>
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

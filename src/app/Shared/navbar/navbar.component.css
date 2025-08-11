@@ -1,0 +1,60 @@
+/* Navbar Gradient */
+.custom-navbar {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Navbar Brand */
+.custom-navbar .navbar-brand {
+  letter-spacing: 0.5px;
+}
+
+/* Nav Links */
+.custom-navbar .nav-link {
+  color: #f8f9fa;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.custom-navbar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.custom-navbar .nav-link.active {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Logout Link Special Style */
+.custom-navbar .logout-link {
+  background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+  border-radius: 6px;
+}
+
+.custom-navbar .logout-link:hover {
+  background: linear-gradient(135deg, #c0392b, #ff4e4e);
+}
+
+/* Mobile Toggle Button */
+.custom-navbar .navbar-toggler {
+  border: none;
+}
+
+.custom-navbar .navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Toggler Icon Color Fix */
+.custom-navbar .navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  .custom-navbar .nav-link {
+    margin-bottom: 5px;
+  }
+}

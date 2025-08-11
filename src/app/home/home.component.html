@@ -1,0 +1,630 @@
+<div class="container-fluid mt-3 pb-5 mb-5">
+  <div class="row g-3">
+    
+    <!-- Sidebar -->
+    <div class="col-md-2 col-12">
+      <app-side-bar [menuItems]="menuItems" (menuChange)="onMenuChange($event)"></app-side-bar>
+    </div>
+
+    <!-- Main Section -->
+    <div class="col-md-7 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary mb-0">
+              <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+            </h2>
+            <div class="text-muted">
+              <i class="bi bi-calendar3 me-1"></i> {{ getCurrentDate() }}
+            </div>
+          </div>
+
+          <!-- Dashboard Section -->
+          <div *ngIf="selectedMenu === 'dashboard'">
+            <!-- Overview Summary -->
+            <div class="overview-section mb-4">
+              <div class="card bg-gradient-light">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <i class="bi bi-pie-chart me-2"></i>System Overview
+                  </h5>
+                  
+                  <!-- Primary Stats Grid -->
+                  <div class="row g-3 mb-4">
+                    <div class="col-md-4 col-6" *ngIf="stats">
+                      <div class="stat-card card text-white bg-primary shadow-sm">
+                        <div class="card-body text-center">
+                          <i class="bi bi-building display-4 mb-2"></i>
+                          <h6>Total Employers</h6>
+                          <h3 class="stat-number">{{ stats.employerCount }}</h3>
+                          <small class="opacity-75">
+                            {{ stats.activeEmployerCount }} Active
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-6" *ngIf="stats">
+                      <div class="stat-card card text-white bg-info shadow-sm">
+                        <div class="card-body text-center">
+                          <i class="bi bi-people display-4 mb-2"></i>
+                          <h6>Total Job Seekers</h6>
+                          <h3 class="stat-number">{{ stats.seekerCount }}</h3>
+                          <small class="opacity-75">
+                            {{ stats.activeSeekerCount }} Active
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-12" *ngIf="stats">
+                      <div class="stat-card card text-white bg-secondary shadow-sm">
+                        <div class="card-body text-center">
+                          <i class="bi bi-person-check display-4 mb-2"></i>
+                          <h6>Total Platform Users</h6>
+                          <h3 class="stat-number">{{ stats.totalUsers }}</h3>
+                          <small class="opacity-75">
+                            {{ getActiveUsersCount() }} Active
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Activity Stats -->
+                  <div class="row g-3">
+                    <div class="col-md-3 col-6" *ngIf="stats">
+                      <div class="mini-stat-card card bg-success-light">
+                        <div class="card-body text-center">
+                          <h4 class="text-success">{{ stats.activeEmployerCount }}</h4>
+                          <small class="text-muted">Active Employers</small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6" *ngIf="stats">
+                      <div class="mini-stat-card card bg-success-light">
+                        <div class="card-body text-center">
+                          <h4 class="text-success">{{ stats.activeSeekerCount }}</h4>
+                          <small class="text-muted">Active Seekers</small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6" *ngIf="stats">
+                      <div class="mini-stat-card card bg-warning-light">
+                        <div class="card-body text-center">
+                          <h4 class="text-warning">{{ stats.inactiveEmployerCount }}</h4>
+                          <small class="text-muted">Inactive Employers</small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6" *ngIf="stats">
+                      <div class="mini-stat-card card bg-warning-light">
+                        <div class="card-body text-center">
+                          <h4 class="text-warning">{{ stats.inactiveSeekerCount }}</h4>
+                          <small class="text-muted">Inactive Seekers</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions for Disapproved Users -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="card border-warning">
+                  <div class="card-header bg-warning bg-opacity-10">
+                    <h5 class="mb-0">
+                      <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                      Quick Actions - Disapproved Users
+                    </h5>
+                  </div>
+                  <div class="card-body ">
+                    <div class="row justify-content-center">
+                      <div class="col-md-6">
+                        <button 
+                          class="btn btn-outline-danger w-100 mb-2" 
+                          (click)="selectedMenu = 'employers'; showDisapprovedEmployers()">
+                          <i class="bi bi-building me-2"></i>
+                          View Disapproved Employers
+                          <span class="badge bg-danger ms-2">{{ stats.unapprovedUsers }}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Analytics Chart -->
+            <div class="analytics-section">
+              <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                      <i class="bi bi-graph-up me-2"></i>User Distribution Analytics
+                    </h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <button class="btn btn-outline-primary active">Chart</button>
+                      <button class="btn btn-outline-primary">Export</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart-container" style="position: relative; height: 350px;">
+                    <canvas
+                      baseChart
+                      [data]="pieChartData"
+                      [options]="pieChartOptions"
+                      type="pie">
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employers Management Section -->
+          <div *ngIf="selectedMenu === 'employers'">
+            <!-- Employers Header -->
+            <div class="management-header mb-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title mb-0">
+                        <i class="bi bi-building me-2"></i>Employer Management
+                      </h5>
+                      <p class="text-muted mb-0">{{ employers.length }} total employers</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-primary btn-sm" (click)="refreshEmployers()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" (click)="exportEmployers()">
+                        <i class="bi bi-download me-1"></i>Export
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-filter-section mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <div class="search-box">
+                        <i class="bi bi-search search-icon"></i>
+                        <input
+                          type="text"
+                          class="form-control ps-5"
+                          placeholder="Search employers by name, company, or email..."
+                          (input)="onSearch($event)"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <select class="form-select" [(ngModel)]="selectedFilter" (change)="applyFilter()">
+                        <option value="">All Employers</option>
+                        <option value="approved">Approved Only</option>
+                        <option value="pending">Pending Approval</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <button 
+                        class="btn btn-danger w-100" 
+                        (click)="showDisapprovedEmployers()"
+                        title="Show all disapproved employers">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        Approval
+                      </button>
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+                        <i class="bi bi-x-circle me-1"></i>Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Employers List -->
+            <div class="employers-list">
+              <div *ngFor="let employer of employers; let i = index" 
+                   class="employer-card card mb-3 shadow-sm border-start border-4"
+                   [ngClass]="getEmployerBorderClass(employer)">
+                <div class="card-body">
+                  
+                  <!-- Employer Header -->
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="employer-info">
+                      <h5 class="card-title mb-1 text-primary">{{ employer.fullName }}</h5>
+                      <p class="text-muted mb-0">
+                        <i class="bi bi-building me-2"></i>{{ employer.companyName }}
+                      </p>
+                      <p class="text-muted mb-0">
+                        <i class="bi bi-person-badge me-2"></i>{{ employer.designation }}
+                      </p>
+                    </div>
+                    <div class="status-badges">
+                      <span class="badge mb-2" [ngClass]="getApprovalBadgeClass(employer.isAproved)">
+                        <i [class]="getApprovalIcon(employer.isAproved) + ' me-1'"></i>
+                        {{ employer.isAproved ? 'Approved' : 'Disapproved' }}
+                      </span>
+                      <br>
+                      <span class="badge" [ngClass]="getActiveBadgeClass(employer.isActive)">
+                        <i [class]="getActiveIcon(employer.isActive) + ' me-1'"></i>
+                        {{ employer.isActive ? 'Active' : 'Inactive' }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Employer Details -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <p class="mb-2">
+                        <i class="bi bi-hash text-muted me-2"></i>
+                        <strong>ID:</strong> 
+                        <span class="text-muted ms-1">{{ employer.employerID }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-envelope text-muted me-2"></i>
+                        <strong>Email:</strong> 
+                        <span class="text-muted ms-1">{{ employer.email }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-telephone text-muted me-2"></i>
+                        <strong>Contact:</strong> 
+                        <span class="text-muted ms-1">{{ employer.contactNumber }}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="mb-2">
+                        <i class="bi bi-geo-alt text-muted me-2"></i>
+                        <strong>Industry:</strong> 
+                        <span class="badge bg-light text-dark ms-1">{{ employer.industry }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-calendar-plus text-muted me-2"></i>
+                        <strong>Joined:</strong> 
+                        <span class="text-muted ms-1">{{ employer.createdAt | date:'mediumDate' }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-globe text-muted me-2"></i>
+                        <strong>Website:</strong> 
+                        <a [href]="employer.website" target="_blank" class="text-primary ms-1">
+                          {{ employer.website || 'Not provided' }}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Action Controls -->
+                  <div class="action-controls">
+                    <div class="row align-items-center">
+                      <div class="col-md-6">
+                        <div class="d-flex gap-3">
+                          <div class="form-check form-switch">
+                            <input type="checkbox" 
+                                   class="form-check-input"
+                                   [(ngModel)]="employer.isAproved"
+                                   (ngModelChange)="toggleApproval(employer)">
+                            <label class="form-check-label">
+                              {{ employer.isAproved ? 'Revoke Approval' : 'Approve Employer' }}
+                            </label>
+                          </div>
+                          <div class="form-check form-switch">
+                            <input type="checkbox" 
+                                   class="form-check-input"
+                                   [(ngModel)]="employer.isActive"
+                                   (ngModelChange)="toggleActivation(employer)">
+                            <label class="form-check-label">
+                              {{ employer.isActive ? 'Deactivate' : 'Activate' }}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="btn-group btn-group-sm float-end" role="group">
+                          <button class="btn btn-outline-success" 
+                                  (click)="sendNotification(employer)"
+                                  title="Send Notification">
+                            <i class="bi bi-bell"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Results State -->
+              <div *ngIf="employers.length === 0" class="text-center mt-5">
+                <i class="bi bi-building display-1 text-muted"></i>
+                <h4 class="mt-3">No Employers Found</h4>
+                <p class="text-muted">No employers match your current search criteria.</p>
+                <button *ngIf="selectedFilter === 'disapproved'" 
+                        class="btn btn-primary me-2" 
+                        (click)="getAllEmployers()">
+                  <i class="bi bi-arrow-left me-2"></i>Show All Employers
+                </button>
+                <button class="btn btn-outline-primary" (click)="clearFilters()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Reset Filters
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job Seekers Management Section -->
+          <div *ngIf="selectedMenu === 'seekers'">
+            <!-- Seekers Header -->
+            <div class="management-header mb-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title mb-0">
+                        <i class="bi bi-people me-2"></i>Job Seeker Management
+                      </h5>
+                      <p class="text-muted mb-0">{{ jobSeekers.length }} total job seekers</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-primary btn-sm" (click)="refreshSeekers()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" (click)="exportSeekers()">
+                        <i class="bi bi-download me-1"></i>Export
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-filter-section mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-5">
+                      <div class="search-box">
+                        <i class="bi bi-search search-icon"></i>
+                        <input
+                          type="text"
+                          class="form-control ps-5"
+                          placeholder="Search job seekers by name, skills, or education..."
+                          (input)="onSearch($event)"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <select class="form-select" [(ngModel)]="selectedFilter" (change)="applyFilter()">
+                        <option value="">All Job Seekers</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                        <option value="experienced">Experienced (2+ years)</option>
+                        <option value="freshers">Fresh Graduates</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+                        <i class="bi bi-x-circle me-1"></i>Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seekers List -->
+            <div class="seekers-list">
+              <div *ngFor="let seeker of jobSeekers; let i = index" 
+                   class="seeker-card card mb-3 shadow-sm border-start border-4"
+                   [ngClass]="getSeekerBorderClass(seeker)">
+                <div class="card-body">
+                  
+                  <!-- Seeker Header -->
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="seeker-info">
+                      <h5 class="card-title mb-1 text-primary">{{ seeker.fullName }}</h5>
+                      <p class="text-muted mb-0">
+                        <i class="bi bi-mortarboard me-2"></i>{{ seeker.education }}
+                      </p>
+                      <p class="text-muted mb-0">
+                        <i class="bi bi-clock-history me-2"></i>{{ seeker.experience }} years experience
+                      </p>
+                    </div>
+                    <div class="status-badges">
+                      <span class="badge" [ngClass]="getActiveBadgeClass(seeker.isActive)">
+                        <i [class]="getActiveIcon(seeker.isActive) + ' me-1'"></i>
+                        {{ seeker.isActive ? 'Active' : 'Inactive' }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Seeker Details -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <p class="mb-2">
+                        <i class="bi bi-hash text-muted me-2"></i>
+                        <strong>ID:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.jobSeekerID }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-envelope text-muted me-2"></i>
+                        <strong>Email:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.email }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-telephone text-muted me-2"></i>
+                        <strong>Contact:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.phoneNumber }}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="mb-2">
+                        <i class="bi bi-geo-alt text-muted me-2"></i>
+                        <strong>Location:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.address || 'Not specified' }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-gender-ambiguous text-muted me-2"></i>
+                        <strong>Gender:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.gender || 'Not specified' }}</span>
+                      </p>
+                      <p class="mb-2">
+                        <i class="bi bi-calendar-plus text-muted me-2"></i>
+                        <strong>Joined:</strong> 
+                        <span class="text-muted ms-1">{{ seeker.createdAt | date:'mediumDate' }}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Skills Section -->
+                  <div class="skills-section mb-3">
+                    <strong class="d-block mb-2">
+                      <i class="bi bi-tools me-2"></i>Skills:
+                    </strong>
+                    <div class="skills-tags">
+                      <span *ngFor="let skill of seeker.skills?.split(',') || []; let last = last" 
+                            class="badge bg-primary me-1 mb-1">
+                        {{ skill.trim() }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Action Controls -->
+                  <div class="action-controls">
+                    <div class="row align-items-center">
+                      <div class="col-md-6">
+                        <div class="d-flex gap-3">
+                          <div class="form-check form-switch">
+                            <input type="checkbox" 
+                                   class="form-check-input"
+                                   [(ngModel)]="seeker.isActive"
+                                   (ngModelChange)="toggleActivation(seeker)">
+                            <label class="form-check-label">
+                              {{ seeker.isActive ? 'Deactivate Account' : 'Activate Account' }}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="btn-group btn-group-sm float-end" role="group">
+                          <button class="btn btn-outline-success" 
+                                  (click)="sendNotification(seeker)"
+                                  title="Send Notification">
+                            <i class="bi bi-bell"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Results State -->
+              <div *ngIf="jobSeekers.length === 0" class="text-center mt-5">
+                <i class="bi bi-people display-1 text-muted"></i>
+                <h4 class="mt-3">No Job Seekers Found</h4>
+                <p class="text-muted">No job seekers match your current search criteria.</p>
+                <button *ngIf="selectedFilter === 'disapproved'" 
+                        class="btn btn-primary me-2" 
+                        (click)="getAllJobSeekers()">
+                  <i class="bi bi-arrow-left me-2"></i>Show All Job Seekers
+                </button>
+                <button class="btn btn-outline-primary" (click)="clearFilters()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Reset Filters
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Profile Sidebar -->
+    <div class="col-md-3 col-12">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-shield-check me-2"></i>Admin Profile
+          </h5>
+
+          <div *ngIf="User" class="admin-profile">
+            <div class="text-center mb-3">
+              <div class="admin-avatar">
+                <i class="bi bi-person-circle display-1 text-primary"></i>
+              </div>
+              <h6 class="mt-2">{{ User.role | titlecase }}</h6>
+            </div>
+
+            <hr>
+
+            <div class="profile-details">
+              <div class="mb-2">
+                <small class="text-muted d-block">User ID</small>
+                <span class="fw-bold">{{ User.userId }}</span>
+              </div>
+
+              <div class="mb-2">
+                <small class="text-muted d-block">
+                  <i class="bi bi-envelope me-1"></i>Email
+                </small>
+                <span>{{ User.email }}</span>
+              </div>
+
+              <div class="mb-2">
+                <small class="text-muted d-block">
+                  <i class="bi bi-shield me-1"></i>Role
+                </small>
+                <span class="badge bg-success">{{ User.role | titlecase }}</span>
+              </div>
+
+              <div class="mb-3">
+                <small class="text-muted d-block">
+                  <i class="bi bi-clock me-1"></i>Session
+                </small>
+                <span class="text-success">Active</span>
+              </div>
+
+              <hr>
+
+              <!-- Quick Actions -->
+              <div class="quick-actions">
+                <h6 class="text-muted mb-3">Quick Actions</h6>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-gear me-2"></i>System Settings
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-download me-2"></i>Export Reports
+                  </button>
+                  <button class="btn btn-outline-info btn-sm">
+                    <i class="bi bi-question-circle me-2"></i>Help & Support
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!User" class="text-center text-muted">
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
