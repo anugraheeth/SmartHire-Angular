@@ -7,6 +7,9 @@ import { RoleSelectionComponent } from './dynamic-signin/role-selection/role-sel
 import { EmployerProfileComponent } from './users/profiles/employer-profile/employer-profile.component';
 import { EmployerappComponent } from './users/application/employerapp/employerapp.component';
 import { SeekerProfileComponent } from './users/profiles/seeker-profile/seeker-profile.component';
+import { ProfileEditComponent } from './users/profiles/profile-edit/profile-edit.component';
+import { AboutComponent } from './Shared/about/about.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 export const routes: Routes = [
     //unguarded routes
@@ -19,6 +22,9 @@ export const routes: Routes = [
     { path : 'employer/home',component:EmployerProfileComponent , canActivate:[AuthGuard]},
     { path : 'employer/applications',component:EmployerappComponent},
     { path : 'seeker/home',component:SeekerProfileComponent},
+    { path : 'profile/edit',component:ProfileEditComponent},
+    { path : 'about',component:AboutComponent},
+    { path : 'forgot-password',component:ForgotPasswordComponent},
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     
 

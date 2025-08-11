@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
       this.Role = this.authService.getLoggedUser()?.role?.toLowerCase() ?? null;
-      console.log(this.Role);
+      // console.log(this.Role);
     });
     
   }

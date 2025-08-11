@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
   setupPieChart() {
     if (!this.stats) return;
 
-    console.log('Setting up pie chart with stats:', this.stats);
+    // console.log('Setting up pie chart with stats:', this.stats);
 
     const approvedUsers = this.stats.approvedUsers || 0;
     const unapprovedUsers = this.stats.unapprovedUsers || 0;
@@ -113,7 +113,7 @@ export class HomeComponent implements OnInit {
       ]
     };
 
-    console.log('Pie chart data set:', this.pieChartData);
+    // console.log('Pie chart data set:', this.pieChartData);
   }
 
   // Utility Functions
@@ -331,8 +331,10 @@ export class HomeComponent implements OnInit {
     this.http.get<Employer[]>("https://localhost:7113/api/Admin/employers")
       .subscribe({
         next: (res) => {
+          console.log(res);
           this.allEmployers = res;
           this.employers = res;
+          console.log(this.employers);
           
           // Apply current filter if one is selected
           if (this.selectedFilter) {
@@ -371,7 +373,7 @@ export class HomeComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.toastr.success("Stats Retrieved Successfully");
-          console.log('Stats received:', res);
+          // console.log('Stats received:', res);
           this.stats = res;
           this.setupPieChart();
         },

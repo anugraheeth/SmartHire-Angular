@@ -12,7 +12,7 @@ import { Application } from '../../../Models/application';
 
 @Component({
   selector: 'app-seeker-profile',
-  imports: [CommonModule,SideBarComponent,FormsModule],
+  imports: [CommonModule,SideBarComponent,FormsModule,RouterModule],
   templateUrl: './seeker-profile.component.html',
   styleUrl: './seeker-profile.component.css'
 })
@@ -28,6 +28,9 @@ export class SeekerProfileComponent {
   selectedLocation: string = '';
   userResume : any;
   applications: Application[] = [];
+
+  selectedFile: File | null = null;
+  coverLetter: string = '';
 
   // Loading states
   isLoadingApplications: boolean = false;
@@ -61,8 +64,8 @@ export class SeekerProfileComponent {
     const loggedUser = localStorage.getItem('user');
     this.User = loggedUser ? JSON.parse(loggedUser) : null;
     this.Role = this.User?.role.toLowerCase() ?? null;
-    
     this.getProfile();
+    this.getResumes();
     this.getAllActiveJobs();
     this.selectedMenu = 'jobs';
     this.onMenuChange(this.selectedMenu);
@@ -172,8 +175,7 @@ export class SeekerProfileComponent {
         this.userResume = res;
       },
       error: (err) => {
-          this.toastr.error("Failed to fetch jobs!");
-          console.error("Failed to fetch jobs", err);
+          this.toastr.warning("No Resume Uploaded!");
         }
     });
   }
@@ -217,7 +219,14 @@ export class SeekerProfileComponent {
       return;
     }
 
-    this.getResumes();
+    if(this.userResume==null){
+      this.getResumes();
+      if(this.userResume == null)
+      {
+        this.toastr.warning("You need a valid Resume to apply!!");
+        return ;
+      }
+    }
 
     const applicationData = {
       jobID: job.jobID,
@@ -259,5 +268,66 @@ export class SeekerProfileComponent {
   goBackToJobs(): void {
     this.onMenuChange('jobs');
   }
+
+
+  //resume 
+  onFileSelected(event: any) {
+  this.selectedFile = event.target.files[0];
+}
+
+uploadResume() {
+  if (!this.selectedFile) {
+    this.toastr.warning("Please select a file before uploading");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', this.selectedFile);
+
+  // Step 1: Upload to Azure
+  this.http.post<{ Url?: string; url?: string }>(
+    'https://localhost:7113/api/Resume/upload-azure', 
+    formData
+  ).subscribe({
+    next: (azureRes) => {
+      // console.log('Azure upload response:', azureRes);
+
+      const filePath = azureRes.Url || azureRes.url;
+      if (!filePath) {
+        this.toastr.error("Azure upload succeeded but no file URL returned");
+        return;
+      }
+
+      // Step 2: Build DTO exactly like Swagger
+      const resumeData = {
+        userID: this.User?.userId ?? 0,
+        coverLetter: this.coverLetter || '',
+        filePath: filePath
+        // No need to send uploadedOn — backend sets it
+      };
+
+      // Step 3: Save to DB
+      this.http.post('https://localhost:7113/api/Resume', resumeData, {
+        headers: { 'Content-Type': 'application/json' }
+      }).subscribe({
+        next: () => {
+          this.toastr.success("Resume uploaded successfully");
+          this.getResumes();
+          this.selectedFile = null;
+          this.coverLetter = '';
+        },
+        error: (err) => {
+          console.error('DB save error:', err);
+          this.toastr.error("Failed to save resume in DB");
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Azure upload error:', err);
+      this.toastr.error("Azure upload failed");
+    }
+  });
+}
+
 
 }

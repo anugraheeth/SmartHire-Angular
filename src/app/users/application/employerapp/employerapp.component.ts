@@ -82,7 +82,7 @@ export class EmployerappComponent implements OnInit {
         next: (res) => {
           this.applications = res;
           this.isLoadingApplications = false;
-          console.log('Applications loaded:', this.applications);
+          // console.log('Applications loaded:', this.applications);
         },
         error: (err) => {
           this.applications = [];
@@ -190,14 +190,28 @@ export class EmployerappComponent implements OnInit {
   }
 
   downloadResume(application: Application): void {
-    if (application.resumeID) {
-      // TODO: Implement resume download functionality
-      this.toaster.info("Resume download functionality to be implemented", "Info");
-      console.log('Downloading resume:', application.resumeID);
-    } else {
-      this.toaster.warning("No resume available for this applicant", "Warning");
-    }
+  if (!application.resumeID) {
+    this.toaster.warning("No resume available for this applicant", "Warning");
+    return;
   }
+
+  // Step 1: Fetch Resume by ID
+  this.http.get<any>(`https://localhost:7113/api/Resume/${application.resumeID}`)
+    .subscribe({
+      next: (resume) => {
+        if (resume && resume.filePath) {
+          // Step 2: Open in a new tab
+          window.open(resume.filePath, '_blank');
+        } else {
+          this.toaster.warning("Resume file not found", "Warning");
+        }
+      },
+      error: () => {
+        this.toaster.error("Failed to fetch resume", "Error");
+      }
+    });
+}
+
 
   sendMessage(application: Application): void {
     this.toaster.info("Messaging functionality to be implemented", "Info");

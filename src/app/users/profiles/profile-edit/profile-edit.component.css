@@ -1,0 +1,103 @@
+.profile-card {
+  border-radius: 14px;
+  background-color: #ffffff;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.profile-field label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 6px; /* Added space between label and field */
+}
+
+.field-display {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field-display span {
+  color: #333;
+}
+
+.edit-icon {
+  color: #667eea;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+  color: #5a67d8;
+}
+
+.edit-mode input {
+  border-radius: 8px;
+  margin-bottom: 8px; /* Added space below input before buttons */
+}
+
+.edit-mode .btn {
+  margin-right: 6px; /* Added gap between Save and Cancel buttons */
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  border: none;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  border: none;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  border: none;
+}
+
+/* Match theme buttons */
+.btn-warning {
+  background: linear-gradient(135deg, #00b09b, #96c93d); /* Teal → Lime Green */
+  border: none;
+  color: #fff;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #00a389, #8fbf3a);
+  box-shadow: 0 4px 12px rgba(0, 176, 155, 0.4);
+}
+
+.modal-content {
+  border-radius: 12px;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.modal-backdrop {
+  background: rgba(0,0,0,0.5);
+}

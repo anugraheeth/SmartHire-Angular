@@ -153,7 +153,7 @@
                 <ng-container *ngIf="applications">
               
                   <!-- Application Summary Stats -->
-                  <div *ngIf="applications.length > 0" class="mb-4">
+                  <div *ngIf="applications.length > 0" class="mb-4 ">
                     <div class="card bg-light">
                       <div class="card-body">
                         <h6 class="card-title">Application Overview</h6>
@@ -202,7 +202,7 @@
                           <div class="row mb-3">
                             <div class="col-md-6">
                               <p class="mb-2">
-                                <i class="bi bi-hash text-muted"></i>
+                                <i class="bi person-badge"></i>
                                 <strong>Application ID:</strong> 
                                 <span class="text-muted"> #{{ application.applicationID }}</span>
                               </p>
@@ -272,7 +272,7 @@
           <h5 class="card-title">Job Seeker Profile</h5>
 
           <div *ngIf="jobSeeker" class="profile-details">
-            <p class="mb-2"><strong>User ID:</strong> {{ jobSeeker.jobSeekerID }}</p>
+            <p class="mb-2"><strong>User ID:</strong> {{ jobSeeker.userID }}</p>
             <p class="mb-2"><strong>Full Name:</strong> {{ jobSeeker.fullName }}</p>
             <p class="mb-2"><strong>Email:</strong> {{ jobSeeker.email }}</p>
             <p class="mb-2"><strong>Phone:</strong> {{ jobSeeker.phoneNumber }}</p>
@@ -315,11 +315,11 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button class="btn btn-primary btn-sm">
+              <button class="btn btn-primary btn-sm" routerLink="/profile/edit">
                 <i class="bi bi-pencil"></i> Edit Profile
               </button>
-              <button class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-download"></i> Download Resume
+              <button class="btn btn-outline-secondary btn-sm"  data-bs-toggle="modal" data-bs-target="#resumeUploadModal">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Manage Resume
               </button>
             </div>
           </div>
@@ -330,5 +330,33 @@
         </div>
       </div>
     </div>
+
+    <!-- Resume Upload Modal -->
+    <div class="modal fade" id="resumeUploadModal" tabindex="-1" aria-labelledby="resumeUploadModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="resumeUploadModalLabel">Upload Resume</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="file" class="form-control mb-3" (change)="onFileSelected($event)">
+            <textarea [(ngModel)]="coverLetter" placeholder="Enter cover letter..." class="form-control mb-3"></textarea>
+            <div *ngIf="userResume">
+              <p class="text-muted small">Current Resume:</p>
+              <a [href]="userResume.filePath" target="_blank" class="text-success">
+                <i class="bi bi-file-earmark-pdf"></i> View Uploaded Resume
+              </a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-success" (click)="uploadResume()">Upload</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>

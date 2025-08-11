@@ -221,3 +221,70 @@
 .jobs-listing::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+
+/* Applications List Styling - Matching Employer Look */
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space between each card */
+}
+
+.application-card {
+  border-radius: 12px;
+  border: 2px solid transparent; /* default transparent border */
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.application-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Body */
+.application-card .card-body {
+  padding: 1.5rem;
+}
+
+/* Title Styling */
+.application-card .card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  color: #007bff; /* primary blue like employer */
+}
+
+/* Paragraphs & Icon Alignment */
+.application-card p {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.application-card i {
+  margin-right: 6px;
+  color: #6c757d;
+}
+
+/* Status Badge - match employer style */
+.application-card .badge {
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Border Color by Status */
+.application-card.pending {
+  border-color: #ffc107; /* yellow border for pending */
+}
+.application-card.approved {
+  border-color: #28a745; /* green border for approved */
+}
+.application-card.rejected {
+  border-color: #dc3545; /* red border for rejected */
+}
