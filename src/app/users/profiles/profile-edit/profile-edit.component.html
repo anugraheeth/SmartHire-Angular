@@ -60,30 +60,72 @@
 
 
 <!-- Password Modal -->
-<div class="modal fade show" *ngIf="showPasswordModal" style="display:block; background:rgba(0,0,0,0.5);">
-  <div class="modal-dialog">
-    <div class="modal-content border-0 shadow-sm">
-      <div class="modal-header">
-        <h5 class="modal-title">Update Password</h5>
-        <button type="button" class="btn-close" (click)="closePasswordModal()"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label>Current Password</label>
-          <input type="password" class="form-control" [(ngModel)]="passwordForm.currentPassword">
+<form #passwordFormRef="ngForm" novalidate>
+  <div class="modal fade show" *ngIf="showPasswordModal" style="display:block; background:rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+      <div class="modal-content border-0 shadow-sm">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Password</h5>
+          <button type="button" class="btn-close" (click)="closePasswordModal()"></button>
         </div>
-        <div class="mb-3">
-          <label>New Password</label>
-          <input type="password" class="form-control" [(ngModel)]="passwordForm.newPassword">
+        <div class="modal-body">
+
+          <!-- Current Password -->
+          <div class="mb-3">
+            <label>Current Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" 
+                   name="currentPassword" 
+                   [(ngModel)]="passwordForm.currentPassword"
+                   #currentPassword="ngModel"
+                   required>
+            <div class="text-danger small" *ngIf="currentPassword.invalid && currentPassword.touched">
+              Current password is required.
+            </div>
+          </div>
+
+          <!-- New Password -->
+          <div class="mb-3">
+            <label>New Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" 
+                   name="newPassword" 
+                   [(ngModel)]="passwordForm.newPassword"
+                   #newPassword="ngModel"
+                   required>
+            <div class="text-danger small" *ngIf="newPassword.invalid && newPassword.touched">
+              New password is required.
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-3">
+            <label>Confirm Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" 
+                   name="confirmPassword" 
+                   [(ngModel)]="passwordForm.confirmPassword"
+                   #confirmPassword="ngModel"
+                   required>
+            <div class="text-danger small" *ngIf="confirmPassword.invalid && confirmPassword.touched">
+              Confirm password is required.
+            </div>
+            <div class="text-danger small" *ngIf="passwordForm.newPassword && passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword">
+              Passwords do not match.
+            </div>
+          </div>
+
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closePasswordModal()">Cancel</button>
-        <button class="btn btn-success" (click)="updatePassword()">Update</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closePasswordModal()">Cancel</button>
+          <button type="button" class="btn btn-success" 
+                  [disabled]="passwordFormRef.invalid || passwordForm.newPassword !== passwordForm.confirmPassword"
+                  (click)="updatePassword()">
+            Update
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>
+
 
 <!-- Delete Profile Modal -->
 <div class="modal fade show" *ngIf="showDeleteModal" style="display: block;" tabindex="-1">

@@ -7,6 +7,7 @@ import { Router,RouterModule } from '@angular/router';
 import { User } from '../user';
 import { AuthService } from '../service/authService/authService';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -24,11 +25,16 @@ export class LoginComponent {
   expiration = '';
   User : User | null = null;
 
-  constructor(private http:HttpClient , private router: Router ,public authService :AuthService,private toastr: ToastrService){}
+  constructor( private http:HttpClient , 
+               private router: Router ,
+               public authService :AuthService,
+               private toastr: ToastrService) { }
+
+
   login(){
     const loginPayload = {email: this.email,password: this.password}
 
-    const apiUrl = 'https://localhost:7113/api/Authentication/login';
+    const apiUrl = `${environment.apiUrl}/Authentication/login`;
 
     this.http.post<any>(apiUrl,loginPayload).subscribe(
       {

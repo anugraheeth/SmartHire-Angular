@@ -280,112 +280,155 @@
 
   <!-- Modals -->
   <!-- New Job Post Modal -->
-  <div class="modal fade" id="postForm" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="formModalLabel">
-            <i class="bi bi-plus-circle me-2"></i>Post New Job
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <!-- Employer ID (hidden/readonly) -->
-            <div class="col-12" style="display: none;">
-              <label class="form-label">Employer ID</label>
-              <input type="number" [(ngModel)]="newPost.employerId" class="form-control" readonly>
-            </div>
+  <form #jobForm="ngForm" novalidate>
+    <div class="modal fade" id="postForm" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalLabel">
+              <i class="bi bi-plus-circle me-2"></i>Post New Job
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
 
-            <!-- Title -->
-            <div class="col-md-6">
-              <label class="form-label">Job Title <span class="text-danger">*</span></label>
-              <input type="text" [(ngModel)]="newPost.title" class="form-control" 
-                     placeholder="e.g., Senior Software Developer">
-            </div>
+          <div class="modal-body">
+            <div class="row g-3">
 
-            <!-- Category -->
-            <div class="col-md-6">
-              <label class="form-label">Category <span class="text-danger">*</span></label>
-              <input type="text" [(ngModel)]="newPost.category" class="form-control"
-                     placeholder="e.g., Information Technology">
-            </div>
+              <!-- Hidden Employer ID -->
+              <div class="col-12" style="display: none;">
+                <label class="form-label">Employer ID</label>
+                <input type="number" [(ngModel)]="newPost.employerId" name="employerId" class="form-control" readonly>
+              </div>
 
-            <!-- Company Location -->
-            <div class="col-md-6">
-              <label class="form-label">Company Location <span class="text-danger">*</span></label>
-              <input type="text" [(ngModel)]="newPost.companyLocation" class="form-control"
-                     placeholder="e.g., Bangalore, Karnataka">
-            </div>
+              <!-- Job Title -->
+              <div class="col-md-6">
+                <label class="form-label">Job Title <span class="text-danger">*</span></label>
+                <input type="text" [(ngModel)]="newPost.title" name="title" #title="ngModel"
+                      class="form-control" placeholder="e.g., Senior Software Developer" required>
+                <div class="text-danger small" *ngIf="title.invalid && title.touched">
+                  Job Title is required.
+                </div>
+              </div>
 
-            <!-- CTC -->
-            <div class="col-md-6">
-              <label class="form-label">CTC <span class="text-danger">*</span></label>
-              <input type="text" [(ngModel)]="newPost.ctc" class="form-control"
-                     placeholder="e.g., ₹8-12 LPA">
-            </div>
+              <!-- Category -->
+              <div class="col-md-6">
+                <label class="form-label">Category <span class="text-danger">*</span></label>
+                <input type="text" [(ngModel)]="newPost.category" name="category" #category="ngModel"
+                      class="form-control" placeholder="e.g., Information Technology" required>
+                <div class="text-danger small" *ngIf="category.invalid && category.touched">
+                  Category is required.
+                </div>
+              </div>
 
-            <!-- Posted Date (readonly) -->
-            <div class="col-md-6">
-              <label class="form-label">Posted Date</label>
-              <input type="datetime-local" [(ngModel)]="newPost.postedDate" class="form-control" readonly>
-            </div>
+              <!-- Company Location -->
+              <div class="col-md-6">
+                <label class="form-label">Company Location <span class="text-danger">*</span></label>
+                <input type="text" [(ngModel)]="newPost.companyLocation" name="companyLocation" #companyLocation="ngModel"
+                      class="form-control" placeholder="e.g., Bangalore, Karnataka" required>
+                <div class="text-danger small" *ngIf="companyLocation.invalid && companyLocation.touched">
+                  Company Location is required.
+                </div>
+              </div>
 
-            <!-- Expiry Date -->
-            <div class="col-md-6">
-              <label class="form-label">Expiry Date <span class="text-danger">*</span></label>
-              <input type="date" [(ngModel)]="newPost.expiryDate" class="form-control">
-            </div>
+              <!-- CTC -->
+              <div class="col-md-6">
+                <label class="form-label">CTC <span class="text-danger">*</span></label>
+                <input type="text" [(ngModel)]="newPost.ctc" name="ctc" #ctc="ngModel"
+                      class="form-control" placeholder="e.g., ₹8-12 LPA" required>
+                <div class="text-danger small" *ngIf="ctc.invalid && ctc.touched">
+                  CTC is required.
+                </div>
+              </div>
 
-            <!-- Description -->
-            <div class="col-12">
-              <label class="form-label">Job Description <span class="text-danger">*</span></label>
-              <textarea [(ngModel)]="newPost.description" class="form-control" rows="2"
-                        placeholder="Describe the role, responsibilities, requirements, and qualifications..."></textarea>
+              <!-- Posted Date -->
+              <div class="col-md-6">
+                <label class="form-label">Posted Date</label>
+                <input type="datetime-local" [(ngModel)]="newPost.postedDate" name="postedDate"
+                      class="form-control" readonly>
+              </div>
+
+              <!-- Expiry Date -->
+              <div class="col-md-6">
+                <label class="form-label">Expiry Date <span class="text-danger">*</span></label>
+                <input type="date" [(ngModel)]="newPost.expiryDate" name="expiryDate" #expiryDate="ngModel"
+                      class="form-control" required>
+                <div class="text-danger small" *ngIf="expiryDate.invalid && expiryDate.touched">
+                  Expiry Date is required.
+                </div>
+              </div>
+
+              <!-- Job Description -->
+              <div class="col-12">
+                <label class="form-label">Job Description <span class="text-danger">*</span></label>
+                <textarea [(ngModel)]="newPost.description" name="description" #description="ngModel"
+                          class="form-control" rows="2" required
+                          placeholder="Describe the role, responsibilities, requirements, and qualifications..."></textarea>
+                <div class="text-danger small" *ngIf="description.invalid && description.touched">
+                  Job Description is required.
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="bi bi-x-circle me-2"></i>Cancel
-          </button>
-          <button type="button" class="btn btn-primary" (click)="save()">
-            <i class="bi bi-check-circle me-2"></i>Post Job
-          </button>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-2"></i>Cancel
+            </button>
+            <button type="button" class="btn btn-primary"
+                    [disabled]="jobForm.invalid"
+                    (click)="save()">
+              <i class="bi bi-check-circle me-2"></i>Post Job
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
+
 
   <!-- Expiry Date Edit Modal -->
-  <div class="modal fade" id="expiryModal" tabindex="-1" aria-labelledby="expiryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="expiryModalLabel">
-            <i class="bi bi-calendar-x me-2"></i>Edit Expiry Date
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Job Title</label>
-            <input type="text" [value]="selectedJob?.title" class="form-control" readonly>
+  <form #expiryForm="ngForm" novalidate>
+    <div class="modal fade" id="expiryModal" tabindex="-1" aria-labelledby="expiryModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="expiryModalLabel">
+              <i class="bi bi-calendar-x me-2"></i>Edit Expiry Date
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="mb-3">
-            <label class="form-label">New Expiry Date <span class="text-danger">*</span></label>
-            <input type="date" [(ngModel)]="selectedJob.expiryDate" class="form-control">
+
+          <div class="modal-body">
+            <!-- Job Title -->
+            <div class="mb-3">
+              <label class="form-label">Job Title</label>
+              <input type="text" [value]="selectedJob?.title" class="form-control" readonly>
+            </div>
+
+            <!-- New Expiry Date -->
+            <div class="mb-3">
+              <label class="form-label">New Expiry Date <span class="text-danger">*</span></label>
+              <input type="date" [(ngModel)]="selectedJob.expiryDate" name="expiryDate" #expiryDate="ngModel"
+                    class="form-control" required>
+              <div class="text-danger small" *ngIf="expiryDate.invalid && expiryDate.touched">
+                Expiry Date is required.
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="bi bi-x-circle me-2"></i>Cancel
-          </button>
-          <button type="button" class="btn btn-primary" (click)="saveExpiryDate()">
-            <i class="bi bi-check-circle me-2"></i>Save Changes
-          </button>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-2"></i>Cancel
+            </button>
+            <button type="button" class="btn btn-primary"
+                    [disabled]="!isDateChanged() || expiryForm.invalid"
+                    (click)="saveExpiryDate()">
+              <i class="bi bi-check-circle me-2"></i>Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
+
 </div>

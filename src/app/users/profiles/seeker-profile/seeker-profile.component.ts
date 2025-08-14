@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { JobSeeker } from '../../../Models/jobSeeker.model';
 import { Application } from '../../../Models/application';
+import { AuthService } from '../../../service/authService/authService';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-seeker-profile',
@@ -57,12 +59,12 @@ export class SeekerProfileComponent {
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    const loggedUser = localStorage.getItem('user');
-    this.User = loggedUser ? JSON.parse(loggedUser) : null;
+    this.User = this.authService.getLoggedUser();    
     this.Role = this.User?.role.toLowerCase() ?? null;
     this.getProfile();
     this.getResumes();
@@ -82,7 +84,7 @@ export class SeekerProfileComponent {
   getProfile() {
     if (!this.User) return;
     
-    this.http.get<JobSeeker>(`https://localhost:7113/api/Profile/jobseeker/${this.User.userId}`)
+    this.http.get<JobSeeker>(`${environment.apiUrl}/Profile/jobseeker/${this.User.userId}`)
       .subscribe({
         next: (res) => {
           this.jobSeeker = res;
@@ -95,7 +97,7 @@ export class SeekerProfileComponent {
   }
 
   getAllActiveJobs() {
-    this.http.get<Jobs[]>('https://localhost:7113/api/Job/Alljobs')
+    this.http.get<Jobs[]>(`${environment.apiUrl}/Job/Alljobs`)
       .subscribe({
         next: (res) => {
           // Filter only active jobs
@@ -114,7 +116,7 @@ export class SeekerProfileComponent {
     this.hasError = false;
     this.errorMessage = '';
 
-    this.http.get<Application[]>(`https://localhost:7113/api/Application/jobseeker/${this.User?.userId}`)
+    this.http.get<Application[]>(`${environment.apiUrl}/Application/jobseeker/${this.User?.userId}`)
       .subscribe({
         next: (res) => {
           this.applications = res;
@@ -169,7 +171,7 @@ export class SeekerProfileComponent {
   }
 
   getResumes(){
-    this.http.get(`https://localhost:7113/api/Resume/seeker/${this.User?.userId}`)
+    this.http.get(`${environment.apiUrl}/Resume/seeker/${this.User?.userId}`)
     .subscribe({
       next:(res) =>{
         this.userResume = res;
@@ -233,10 +235,11 @@ export class SeekerProfileComponent {
       jobSeekerID: this.User.userId,
       resumeID:this.userResume.resumeID
     };
-    this.http.post('https://localhost:7113/api/Application', applicationData, { responseType: 'text' })
+    this.http.post(`${environment.apiUrl}/Application`, applicationData, { responseType: 'text' })
       .subscribe({
         next: (res) => {
           this.toastr.success(res);
+          this.getAllActiveJobs();
         },
         error: (err) => {
           this.toastr.error(err);
@@ -286,7 +289,7 @@ uploadResume() {
 
   // Step 1: Upload to Azure
   this.http.post<{ Url?: string; url?: string }>(
-    'https://localhost:7113/api/Resume/upload-azure', 
+    `${environment.apiUrl}/Resume/upload-azure`, 
     formData
   ).subscribe({
     next: (azureRes) => {
@@ -306,8 +309,13 @@ uploadResume() {
         // No need to send uploadedOn — backend sets it
       };
 
+      if( !resumeData.coverLetter){
+        this.toastr.warning("Haven't provided the Coverletter!!");
+        return; 
+      }
+
       // Step 3: Save to DB
-      this.http.post('https://localhost:7113/api/Resume', resumeData, {
+      this.http.post(`${environment.apiUrl}/Resume`, resumeData, {
         headers: { 'Content-Type': 'application/json' }
       }).subscribe({
         next: () => {

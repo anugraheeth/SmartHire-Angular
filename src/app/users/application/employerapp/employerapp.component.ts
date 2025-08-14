@@ -182,12 +182,6 @@ export class EmployerappComponent implements OnInit {
     return icons[status] || 'bi bi-question-circle';
   }
 
-  // Action methods for the enhanced UI
-  viewApplicantProfile(application: Application): void {
-    this.toaster.info("Applicant profile view functionality to be implemented", "Info");
-    console.log('Viewing profile for applicant:', application.jobSeekerID);
-    // TODO: Implement navigation to applicant profile or open modal
-  }
 
   downloadResume(application: Application): void {
   if (!application.resumeID) {
@@ -219,29 +213,12 @@ export class EmployerappComponent implements OnInit {
     // TODO: Implement messaging functionality
   }
 
-  shareJobPosting(): void {
-    if (this.selectedJob) {
-      // TODO: Implement job sharing functionality
-      this.toaster.info("Job sharing functionality to be implemented", "Info");
-      console.log('Sharing job posting:', this.selectedJob.jobID);
-    }
-  }
 
   goBackToJobs(): void {
     this.router.navigate(['/employer/home']);
   }
 
-  editJob(job: Jobs): void {
-    this.toaster.info("Job editing functionality to be implemented", "Info");
-    console.log('Editing job:', job.jobID);
-    // TODO: Implement job editing functionality
-  }
-
-  viewJobStatistics(job: Jobs): void {
-    this.toaster.info("Job statistics view to be implemented", "Info");
-    console.log('Viewing statistics for job:', job.jobID);
-    // TODO: Implement job statistics view
-  }
+ 
 
   // Utility methods
   getTotalApplicationsCount(): number {
@@ -267,26 +244,4 @@ export class EmployerappComponent implements OnInit {
     }
   }
 
-  // Bulk actions for future enhancement
-  bulkStatusUpdate(applications: Application[], newStatus: string): void {
-    // TODO: Implement bulk status update functionality
-    this.toaster.info("Bulk status update functionality to be implemented", "Info");
-    console.log('Bulk updating applications to status:', newStatus);
-  }
-
-  exportApplications(): void {
-    // TODO: Implement export functionality (CSV, Excel, PDF)
-    this.toaster.info("Export functionality to be implemented", "Info");
-    console.log('Exporting applications for job:', this.selectedJob?.jobID);
-  }
-
-  filterApplicationsByStatus(status: string): void {
-    // TODO: Implement client-side filtering
-    console.log('Filtering applications by status:', status);
-  }
-
-  searchApplications(searchTerm: string): void {
-    // TODO: Implement client-side search functionality
-    console.log('Searching applications with term:', searchTerm);
-  }
 }

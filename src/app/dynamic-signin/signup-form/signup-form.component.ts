@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-signup-form',
@@ -60,7 +61,7 @@ export class SignupFormComponent implements OnInit {
 
     // Debug log for form value changes
     this.signupForm.valueChanges.subscribe(val => {
-      console.log('[form values]', val);
+      console.log("form changed"); 
     });
   }
 
@@ -258,7 +259,7 @@ export class SignupFormComponent implements OnInit {
         };
       }
 
-      this.http.post(`https://localhost:7113/api/Registration/register-${this.role}`, dto)
+      this.http.post(`${environment.apiUrl}/Registration/register-${this.role}`, dto)
         .subscribe({
           next: (res) => {
             console.log('Registration successful:', res);

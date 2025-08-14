@@ -10,7 +10,8 @@
   import { Modal } from 'bootstrap';
   import { JobsService } from '../../../service/jobService/jobService';
   import { Router, RouterModule } from '@angular/router';
-import { newJob } from '../../../Models/newJob';
+  import { newJob } from '../../../Models/newJob';
+  import { environment } from '../../../../environments/environment';
 
   @Component({
     selector: 'app-employer-profile',
@@ -27,6 +28,7 @@ import { newJob } from '../../../Models/newJob';
   Role:string|null=null;
   Jobs : Jobs[] =[];
  
+  originalExpiryDate: string | null = null;
   employer : any
   selectedMenu : string ='';
   selectedJob: any = {};
@@ -84,7 +86,7 @@ import { newJob } from '../../../Models/newJob';
   }
 
   getProfile(){
-    this.http.get<any>(`https://localhost:7113/api/Profile/employer/${this.User?.userId}`)
+    this.http.get<any>(`${environment.apiUrl}/Profile/employer/${this.User?.userId}`)
     .subscribe({
       next:(res) => {
         this.employer = res;
@@ -100,7 +102,7 @@ import { newJob } from '../../../Models/newJob';
   toggleActivation(job:any){
       const newStatus = job.isActive;
       const jobId = job.jobID;
-      this.http.put(`https://localhost:7113/api/Job/UpdateJob/${jobId}`,{
+      this.http.put(`${environment.apiUrl}/Job/UpdateJob/${jobId}`,{
         expiryDate: null,
         isActive: newStatus
       },{responseType:"text"}).subscribe({
@@ -130,7 +132,7 @@ import { newJob } from '../../../Models/newJob';
   }
 
  save() {
-  this.http.post("https://localhost:7113/api/Job/AddJob", this.newPost, { responseType: "text" })
+  this.http.post(`${environment.apiUrl}/Job/AddJob`, this.newPost, { responseType: "text" })
     .subscribe({
       next: (res) => {
         this.toastr.success(res);
@@ -164,6 +166,7 @@ import { newJob } from '../../../Models/newJob';
   
   openExpiryModal(job: any) {
     this.selectedJob = { ...job };
+     this.originalExpiryDate = job.expiryDate;
     const modalEl = document.getElementById('expiryModal');
     if (modalEl) {
       const modal = new Modal(modalEl);
@@ -171,9 +174,27 @@ import { newJob } from '../../../Models/newJob';
     }
   }
 
+  // Check if date is changed
+  isDateChanged(): boolean {
+    return this.selectedJob?.expiryDate !== this.originalExpiryDate;
+  }
+
   saveExpiryDate() {
     const jobId = this.selectedJob.jobID;
-    this.http.put(`https://localhost:7113/api/Job/UpdateJob/${jobId}`, {
+    const selectedDate = new Date(this.selectedJob.expiryDate);
+    const today = new Date();
+    console.log(selectedDate,today);
+
+    if (selectedDate.getDate() <= today.getDate()) {
+      if (selectedDate.getDate() < today.getDate()) {
+        this.toastr.error("You cannot select an old date");
+      } else {
+        this.toastr.error("Update with a new date!!");
+      }
+      return;
+    }
+
+    this.http.put(`${environment.apiUrl}/Job/UpdateJob/${jobId}`, {
       expiryDate: this.selectedJob.expiryDate,
       isActive: null
     }, { responseType: "text" })

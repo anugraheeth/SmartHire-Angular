@@ -10,6 +10,8 @@ import { ChartData, ChartOptions, ChartConfiguration } from 'chart.js';
 import { User } from '../user';
 import { JobSeeker } from '../Models/jobSeeker.model';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../service/authService/authService';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -76,11 +78,11 @@ export class HomeComponent implements OnInit {
     { label: 'Seekers', value: 'seekers' }
   ];
 
-  constructor(private http: HttpClient, private toastr: ToastrService) {}
+  constructor(private http: HttpClient, private toastr: ToastrService,private authService:AuthService) {}
 
   ngOnInit(): void {
-    const loggedUser = localStorage.getItem('user');
-    this.User = loggedUser ? JSON.parse(loggedUser) : null;
+    const loggedUser = this.authService.getLoggedUser();
+    this.User = loggedUser ?? null;
     this.getStats();
     // Auto-load dashboard when component initializes
     this.selectedMenu = 'dashboard';
@@ -152,7 +154,7 @@ export class HomeComponent implements OnInit {
   }
 
   getApprovalIcon(isApproved: boolean): string {
-    return isApproved ? 'bi bi-check-circle me-1' : 'bi bi-clock me-1';
+    return isApproved ? 'bi bi-check-circle me-2' : 'bi bi-clock me-2';
   }
 
   getActiveIcon(isActive: boolean): string {
@@ -222,7 +224,7 @@ export class HomeComponent implements OnInit {
     this.toastr.info("Loading all disapproved employers...");
     this.selectedFilter = 'disapproved';
     
-    this.http.get<Employer[]>("https://localhost:7113/api/Admin/employers")
+    this.http.get<Employer[]>(`${environment.apiUrl}/Admin/employers`)
       .subscribe({
         next: (res) => {
           // Filter only disapproved employers
@@ -251,11 +253,6 @@ export class HomeComponent implements OnInit {
     return this.allEmployers.filter(emp => !emp.isAproved).length;
   }
 
-  getDisapprovedJobSeekersCount(): number {
-    return this.allJobSeekers.filter(seeker => 
-      seeker.hasOwnProperty('isApproved') ? !(seeker as any).isApproved : false
-    ).length;
-  }
 
   // UPDATED: Enhanced filter methods
   private filterEmployers() {
@@ -328,7 +325,7 @@ export class HomeComponent implements OnInit {
 
   // Data Fetching Functions
   getAllEmployers() {
-    this.http.get<Employer[]>("https://localhost:7113/api/Admin/employers")
+    this.http.get<Employer[]>(`${environment.apiUrl}/Admin/employers`)
       .subscribe({
         next: (res) => {
           console.log(res);
@@ -350,7 +347,7 @@ export class HomeComponent implements OnInit {
 
   // NEW: Get all job seekers method
   getAllJobSeekers() {
-    this.http.get<JobSeeker[]>("https://localhost:7113/api/Admin/jobseekers")
+    this.http.get<JobSeeker[]>(`${environment.apiUrl}/Admin/jobseekers`)
       .subscribe({
         next: (res) => {
           this.allJobSeekers = res;
@@ -369,7 +366,7 @@ export class HomeComponent implements OnInit {
   }
 
   getStats() {
-    this.http.get<any>('https://localhost:7113/api/Admin/stats')
+    this.http.get<any>(`${environment.apiUrl}/Admin/stats`)
       .subscribe({
         next: (res) => {
           this.toastr.success("Stats Retrieved Successfully");
@@ -399,7 +396,7 @@ export class HomeComponent implements OnInit {
   }
 
   getFilteredEmployers(searchTerm: string) {
-    this.http.get<Employer[]>("https://localhost:7113/api/Admin/employer-filter", {
+    this.http.get<Employer[]>(`${environment.apiUrl}/Admin/employer-filter`, {
       params: { searchTerm }
     }).subscribe({
       next: (res) => {
@@ -419,7 +416,7 @@ export class HomeComponent implements OnInit {
   }
 
   getFilteredSeeker(searchTerm: string) {
-    this.http.get<JobSeeker[]>("https://localhost:7113/api/Admin/jobseeker-filter", {
+    this.http.get<JobSeeker[]>(`${environment.apiUrl}/Admin/jobseeker-filter`, {
       params: { searchTerm }
     }).subscribe({
       next: (res) => {
@@ -442,7 +439,7 @@ export class HomeComponent implements OnInit {
   toggleApproval(employer: Employer) {
     const newStatus = employer.isAproved;
 
-    this.http.post("https://localhost:7113/api/Admin/approve-user", {
+    this.http.post(`${environment.apiUrl}/Admin/approve-user`, {
       userID: employer.employerID,
       isApproved: newStatus
     }, { responseType: 'text' })
@@ -469,7 +466,7 @@ export class HomeComponent implements OnInit {
     const newStatus = user.isActive;
     const userId = user.jobSeekerID || user.employerID;
 
-    this.http.post("https://localhost:7113/api/Admin/activate-user", {
+    this.http.post(`${environment.apiUrl}/Admin/activate-user`, {
       userId: userId,
       isActive: newStatus
     }, { responseType: "text" }).subscribe({

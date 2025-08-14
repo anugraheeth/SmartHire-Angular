@@ -18,14 +18,13 @@ export class NavbarComponent implements OnInit {
   constructor(public authService: AuthService,public router : Router ,private toastr:ToastrService) {}
 
   ngOnInit() {
-    this.authService.isLoggedIn$.subscribe(status => {
+      this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
       this.Role = this.authService.getLoggedUser()?.role?.toLowerCase() ?? null;
       // console.log(this.Role);
     });
     
   }
-
   logout() {
     this.authService.logout();
     this.toastr.success("Logged Out SuccessFully");

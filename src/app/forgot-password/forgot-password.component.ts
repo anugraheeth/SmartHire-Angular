@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterModule],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css'
 })
@@ -23,7 +24,7 @@ export class ForgotPasswordComponent {
       return;
     }
 
-    this.http.post('https://localhost:7113/api/Authentication/password-reset', JSON.stringify(this.email), {
+    this.http.post(`${environment.apiUrl}/Authentication/password-reset`, JSON.stringify(this.email), {
       headers: { 'Content-Type': 'application/json' }
     }).subscribe({
       next: () => {

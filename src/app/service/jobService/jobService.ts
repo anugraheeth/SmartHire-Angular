@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Jobs } from '../../Models/jobs.model';
 import { AuthService } from '../authService/authService';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class JobsService {
@@ -27,7 +28,7 @@ export class JobsService {
     if (!user) return;
 
     this.http
-      .get<Jobs[]>(`https://localhost:7113/api/Job/employer/postedJobs/${user.userId}`)
+      .get<Jobs[]>(`${environment.apiUrl}/Job/employer/postedJobs/${user.userId}`)
       .subscribe({
         next: (res) => this.setJobs(res),
         error: (err) => console.error('Failed to fetch jobs posted', err),

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../service/authService/authService';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-edit',
@@ -21,7 +23,8 @@ export class ProfileEditComponent implements OnInit {
   passwordForm = {
     userID: null,
     currentPassword: '',
-    newPassword: ''
+    newPassword: '',
+    confirmPassword:''
   };
 
   showDeleteModal = false;
@@ -52,13 +55,12 @@ export class ProfileEditComponent implements OnInit {
     { key: 'bio', label: 'Bio', editable: true }
   ];
 
-  constructor(private http: HttpClient, private toastr: ToastrService) {}
+  constructor(private http: HttpClient, private toastr: ToastrService,private authService:AuthService) {}
 
   ngOnInit(): void {
-    const loggedUser = localStorage.getItem('user');
-    this.user = loggedUser ? JSON.parse(loggedUser) : null;
+    const loggedUser = this.authService.getLoggedUser();
+    this.user = loggedUser ??  null;
     if (!this.user) return;
-
     this.role = this.user.role.toLowerCase() as 'employer' | 'seeker';
     this.loadProfile();
   }
@@ -66,8 +68,8 @@ export class ProfileEditComponent implements OnInit {
   loadProfile() {
     const apiUrl =
       this.role === 'employer'
-        ? `https://localhost:7113/api/Profile/employer/${this.user.userId}`
-        : `https://localhost:7113/api/Profile/jobseeker/${this.user.userId}`;
+        ? `${environment.apiUrl}/Profile/employer/${this.user.userId}`
+        : `${environment.apiUrl}/Profile/jobseeker/${this.user.userId}`;
 
     this.http.get<any>(apiUrl).subscribe({
       next: (res) => {
@@ -85,8 +87,8 @@ export class ProfileEditComponent implements OnInit {
   saveField(field: string) {
     const apiUrl =
       this.role === 'employer'
-        ? `https://localhost:7113/api/Profile/employer/update`
-        : `https://localhost:7113/api/Profile/jobseeker/update`;
+        ? `${environment.apiUrl}/Profile/employer/update`
+        : `${environment.apiUrl}/Profile/jobseeker/update`;
 
     // send full DTO
     const payload = { ...this.profile };
@@ -106,8 +108,8 @@ export class ProfileEditComponent implements OnInit {
 
     const apiUrl =
       this.role === 'employer'
-        ? `https://localhost:7113/api/Profile/employer/${this.profile.employerID}`
-        : `https://localhost:7113/api/Profile/jobseeker/${this.profile.userID}`;
+        ? `${environment.apiUrl}/Profile/employer/${this.profile.employerID}`
+        : `${environment.apiUrl}/Profile/jobseeker/${this.profile.userID}`;
 
     this.http.delete(apiUrl, { responseType: 'text' }).subscribe({
       next: () => {
@@ -134,7 +136,7 @@ confirmDeleteProfile() {
     return;
   }
 
-  const apiUrl = `https://localhost:7113/api/Profile/delete?userId=${this.profile.userID || this.profile.employerID}&password=${encodeURIComponent(this.deletePassword)}`;
+  const apiUrl = `${environment.apiUrl}/Profile/delete?userId=${this.profile.userID || this.profile.employerID}&password=${encodeURIComponent(this.deletePassword)}`;
 
   this.http.delete(apiUrl, { responseType: 'text' }).subscribe({
     next: () => {
@@ -160,7 +162,7 @@ confirmDeleteProfile() {
   }
 
   updatePassword() {
-    const apiUrl = `https://localhost:7113/api/Profile/change-password`;
+    const apiUrl = `${environment.apiUrl}/Profile/change-password`;
     this.http.post(apiUrl, this.passwordForm, { responseType: 'text' }).subscribe({
       next: () => {
         this.toastr.success('Password updated successfully.');
