@@ -242,8 +242,14 @@ export class SeekerProfileComponent {
           this.getAllActiveJobs();
         },
         error: (err) => {
+          if(err.status==409)
+          {
+            this.toastr.warning("You have already applied for this job");
+          }
+          else{
           this.toastr.error(err);
           console.error("Application error", err);
+          }
         }
       });
   }

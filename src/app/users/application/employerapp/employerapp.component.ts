@@ -10,6 +10,7 @@ import { Application } from '../../../Models/application';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-employerapp',
@@ -77,7 +78,7 @@ export class EmployerappComponent implements OnInit {
     this.hasError = false;
     this.errorMessage = '';
 
-    this.http.get<Application[]>(`https://localhost:7113/api/Application/job/${this.selectedMenu}`)
+    this.http.get<Application[]>(`${environment.apiUrl}/Application/job/${this.selectedMenu}`)
       .subscribe({
         next: (res) => {
           this.applications = res;
@@ -108,7 +109,7 @@ export class EmployerappComponent implements OnInit {
     const appID = application.applicationID;
     const newStatus = application.status;
 
-    this.http.put("https://localhost:7113/api/Application", {
+    this.http.put(`${environment.apiUrl}/Application`, {
       applicationID: appID,
       status: newStatus
     }, { responseType: "text" }).subscribe({
@@ -190,7 +191,7 @@ export class EmployerappComponent implements OnInit {
   }
 
   // Step 1: Fetch Resume by ID
-  this.http.get<any>(`https://localhost:7113/api/Resume/${application.resumeID}`)
+  this.http.get<any>(`${environment.apiUrl}/Resume/${application.resumeID}`)
     .subscribe({
       next: (resume) => {
         if (resume && resume.filePath) {

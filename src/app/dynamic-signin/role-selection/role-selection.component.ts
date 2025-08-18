@@ -32,4 +32,7 @@ export class RoleSelectionComponent {
     this.roleSelected.emit(role.key);
     this.router.navigate(['/signup', role.key]);
   }
+  selectGuest(){
+    this.router.navigate(['/guest']);
+  }
 }

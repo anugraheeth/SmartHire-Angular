@@ -24,6 +24,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/bootstrap-icons/font",
+                "output": "assets/bootstrap-icons/font"
               }
             ],
             "styles": [
@@ -62,7 +67,8 @@
                   "maximumError": "3mb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "./"
             },
             "development": {
               "fileReplacements": [

@@ -20,15 +20,15 @@
 
     <!-- Nav Links -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto" *ngIf="authService.isLoggedIn$ | async">
-        <li class="nav-item">
+      <ul class="navbar-nav ms-auto " *ngIf="authService.isLoggedIn$ | async">
+        <li class="nav-item me-3">
           <a class="nav-link px-3 py-2"
              [routerLink]="[Role, 'home']"
              [class.active]="router.url.includes('home')">
             Home
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item me-3">
           <a class="nav-link px-3 py-2"
              routerLink="/about"
              [class.active]="router.url === '/about'">

@@ -31,6 +31,15 @@ export class HomeComponent implements OnInit {
   selectedFilter: string = '';
   term: string = '';
   stats: any = null;
+
+  //UPDATE Password
+  showPasswordModal = false;
+  passwordForm = {
+    userID: null as number | null,
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword:''
+  };
   
   // Pie chart configuration
   pieChartData: ChartData<'pie', number[], string> = {
@@ -83,6 +92,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     const loggedUser = this.authService.getLoggedUser();
     this.User = loggedUser ?? null;
+    this.passwordForm.userID = this.User?.userId ?? null;
     this.getStats();
     // Auto-load dashboard when component initializes
     this.selectedMenu = 'dashboard';
@@ -589,5 +599,29 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.toastr.success(`Notification sent to ${user.fullName}`);
     }, 1000);
+  }
+
+  // Password Modal Actions
+  openPasswordModal() {
+    this.passwordForm.currentPassword = '';
+    this.passwordForm.newPassword = '';
+    this.showPasswordModal = true;
+  }
+
+  closePasswordModal() {
+    this.showPasswordModal = false;
+  }
+
+  updatePassword() {
+    const apiUrl = `${environment.apiUrl}/Profile/change-password`;
+    this.http.post(apiUrl, this.passwordForm, { responseType: 'text' }).subscribe({
+      next: () => {
+        this.toastr.success('Password updated successfully.');
+        this.closePasswordModal();
+        localStorage.clear();
+        location.href = '/'; // logout
+      },
+      error: () => this.toastr.error('Failed to update password.')
+    });
   }
 }

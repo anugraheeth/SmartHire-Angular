@@ -29,7 +29,14 @@ export class LoginComponent {
                private router: Router ,
                public authService :AuthService,
                private toastr: ToastrService) { }
+  
 
+  ngOnInit(): void {
+    const user = this.authService.getLoggedUser();
+    if (user!=null) {
+      this.router.navigate([`${user.role}/home`]);
+    }
+  }
 
   login(){
     const loginPayload = {email: this.email,password: this.password}
