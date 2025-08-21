@@ -205,6 +205,7 @@
                         <input
                           type="text"
                           class="form-control ps-5"
+                          [(ngModel)]="term"
                           placeholder="Search employers by name, company, or email..."
                           (input)="onSearch($event)"
                         />
@@ -402,20 +403,12 @@
                         <input
                           type="text"
                           class="form-control ps-5"
+                          [(ngModel)]="term"
                           placeholder="Search job seekers by name, skills, or education..."
                           (input)="onSearch($event)"
                         />
                       </div>
                     </div>
-                    <!-- <div class="col-md-3">
-                      <select class="form-select" [(ngModel)]="selectedFilter" (change)="applyFilter()">
-                        <option value="">All Job Seekers</option>
-                        <option value="active">Active Only</option>
-                        <option value="inactive">Inactive Only</option>
-                        <option value="experienced">Experienced (2+ years)</option>
-                        <option value="freshers">Fresh Graduates</option>
-                      </select>
-                    </div> -->
                     <div class="col-md-2">
                       <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
                         <i class="bi bi-x-circle me-1"></i>Clear

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup-form',
@@ -52,7 +53,8 @@ export class SignupFormComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -267,7 +269,14 @@ export class SignupFormComponent implements OnInit {
             this.router.navigate(['/login']);
           },
           error: (err) => {
-            console.error('Error:', err);
+            if(err.status === 409) {
+              this.toastr.error('Email already exists!');
+            }else
+            {
+              console.error('Error:', err);
+              this.toastr.error('Registration failed. Please try again later.');
+              this.isLoading = false;
+            }
             this.isLoading = false;
           }
         });

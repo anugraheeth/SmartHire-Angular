@@ -21,12 +21,12 @@ export const routes: Routes = [
     { path : 'forgot-password',component:ForgotPasswordComponent},
 
     //guarded routes
-    { path : 'admin/home',component:HomeComponent,canActivate :[AuthGuard]},
-    { path : 'employer/home',component:EmployerProfileComponent , canActivate:[AuthGuard]},
-    { path : 'employer/applications',component:EmployerappComponent,canActivate :[AuthGuard]},
-    { path : 'seeker/home',component:SeekerProfileComponent,canActivate :[AuthGuard]},
-    { path : 'profile/edit',component:ProfileEditComponent,canActivate :[AuthGuard]},
-    { path : 'about',component:AboutComponent,canActivate :[AuthGuard]},
+    { path : 'admin/home',component:HomeComponent,canActivate :[AuthGuard],data: { roles: ['admin'] }},
+    { path : 'employer/home',component:EmployerProfileComponent , canActivate:[AuthGuard],data: { roles: ['employer'] }},
+    { path : 'employer/applications',component:EmployerappComponent,canActivate :[AuthGuard],data: { roles: ['employer'] }},
+    { path : 'seeker/home',component:SeekerProfileComponent,canActivate :[AuthGuard],data: { roles: ['seeker'] }},
+    { path : 'profile/edit',component:ProfileEditComponent,canActivate :[AuthGuard],data: { roles: ['employer', 'seeker'] }},
+    { path : 'about',component:AboutComponent,canActivate :[AuthGuard],data: { roles: ['admin', 'employer', 'seeker'] }},
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     
 
